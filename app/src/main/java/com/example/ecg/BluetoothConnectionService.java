@@ -5,20 +5,26 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 
 
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-public class BluetoothConnectionService {
+public class BluetoothConnectionService extends ViewModel{
+
     private static final String TAG = "BluetoothConnectionServ";
     private static final String appName = "MYAPP";
     private static final UUID MY_UUID_INSECURE =
-            UUID.fromString("8ce255c0-200a-11e0-ac64-0800200c9a66");
+            UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private final BluetoothAdapter mBluetoothAdapter;
     Context mContext;
 
@@ -29,10 +35,31 @@ public class BluetoothConnectionService {
 
     private ConnectedThread mConnectedThread;
 
+    private  BluetoothDataViewModel model;
+
+
+    private final MutableLiveData<BluetoothLiveData> data =
+            new MutableLiveData<>(
+                    new BluetoothLiveData(new ArrayList<>())
+            );
+
+
+    public void addReading(final int value) {
+        final List<Integer> tmp = this.data.getValue().values;
+        tmp.add(value);
+
+        this.data.postValue(new BluetoothLiveData(tmp));
+    }
+    public MutableLiveData<BluetoothLiveData> getReadings() {
+        return this.data;
+    }
 
     public BluetoothConnectionService(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        model =  new ViewModelProvider((MainActivity) mContext).get(BluetoothDataViewModel.class);
+        model.addReading(25);
+        List<Integer> temp = Objects.requireNonNull(model.getReadings().getValue()).values;
         start();
     }
 
@@ -40,6 +67,7 @@ public class BluetoothConnectionService {
         public final BluetoothServerSocket mmServerSocket;
 
         public AcceptThread(){
+
             BluetoothServerSocket tmp = null;
             try {
                 tmp = mBluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(appName, MY_UUID_INSECURE);
@@ -148,12 +176,12 @@ public class BluetoothConnectionService {
         mConnectThread = new ConnectThread(device, uuid);
         mConnectThread.start();
     }
-
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
         private final InputStream mmInStream;
 
-        Intent intent = new Intent(mContext.getApplicationContext(), MainActivity.class);
+
+
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "ConnectedThread: Starting.");
 
@@ -185,6 +213,7 @@ public class BluetoothConnectionService {
                     bytes = mmInStream.read(buffer);
 
                     String incomingMessage = new String(buffer, 0, bytes);
+
                     String[] values = incomingMessage.split(",");
                     for(String value : values) {
                         if(isNumeric(value)) {
