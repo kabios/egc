@@ -35,7 +35,7 @@ public class BluetoothConnectionService extends ViewModel{
 
     private ConnectedThread mConnectedThread;
 
-    private  BluetoothDataViewModel model;
+
 
 
     private final MutableLiveData<BluetoothLiveData> data =
@@ -57,9 +57,7 @@ public class BluetoothConnectionService extends ViewModel{
     public BluetoothConnectionService(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        model =  new ViewModelProvider((MainActivity) mContext).get(BluetoothDataViewModel.class);
-        model.addReading(25);
-        List<Integer> temp = Objects.requireNonNull(model.getReadings().getValue()).values;
+
         start();
     }
 

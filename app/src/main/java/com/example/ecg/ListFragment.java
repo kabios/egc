@@ -25,11 +25,12 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.ecg.databinding.FragmentListBinding;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ListFragment extends Fragment implements AdapterView.OnItemClickListener {
-
-    private ListViewModel mViewModel;
+    private  BluetoothDataViewModel model;
     private FragmentListBinding listBinding;
     private BluetoothConnectionService mainViewModel;
 
@@ -89,6 +90,8 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
                              @Nullable Bundle savedInstanceState) {
         this.listBinding = FragmentListBinding.inflate(inflater, container, false);
 
+        this.model = new ViewModelProvider(this.requireActivity()).get(BluetoothDataViewModel.class);
+
         Button btnONOFF = (Button) listBinding.btnONOFF;
         btnEnableDisable_Discoverable = (Button) listBinding.btnDiscoverableOnOff;
         lvNewDevices = (ListView) listBinding.lvNewDevices;
@@ -142,13 +145,15 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ListViewModel.class);
-        // TODO: Use the ViewModel
+        model =  new ViewModelProvider((MainActivity) getContext()).get(BluetoothDataViewModel.class);
+        model.addReading(25);
+        List<Integer> temp = Objects.requireNonNull(model.getReadings().getValue()).values;
     }
 
     @SuppressLint("MissingPermission")

@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     BluetoothAdapter mBluetoothAdapter;
     Button btnEnableDisable_Discoverable;
-    private  ListViewModel listViewModel;
     BluetoothConnectionService mBluetoothConnection;
 
     Button btnStartConnection;
@@ -54,12 +53,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public ArrayList<BluetoothDevice> mBTDevices = new ArrayList<>();
     public DeviceListAdapter mDeviceListAdapter;
 
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onCreate(savedInstanceState, persistentState);
-        FragmentListBinding binding = FragmentListBinding.inflate(getLayoutInflater());
-    }
 
     ListView lvNewDevices;
 
@@ -193,8 +186,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_list);
-        this.listViewModel = findViewById()
+//        setContentView(R.layout.fragment_list);
+        FragmentListBinding binding = FragmentListBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
     }
 
     //create method for starting connection
