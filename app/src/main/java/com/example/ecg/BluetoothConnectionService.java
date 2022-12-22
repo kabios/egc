@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-public class BluetoothConnectionService extends ViewModel{
+public class BluetoothConnectionService extends ViewModel {
 
     private static final String TAG = "BluetoothConnectionServ";
     private static final String appName = "MYAPP";
@@ -34,7 +35,7 @@ public class BluetoothConnectionService extends ViewModel{
     private UUID deviceUUID;
 
     private ConnectedThread mConnectedThread;
-
+    private  BluetoothDataViewModel model;
 
 
 
@@ -57,7 +58,6 @@ public class BluetoothConnectionService extends ViewModel{
     public BluetoothConnectionService(Context context) {
         mContext = context;
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
         start();
     }
 

@@ -91,38 +91,38 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         this.listBinding = FragmentListBinding.inflate(inflater, container, false);
 
         this.model = new ViewModelProvider(this.requireActivity()).get(BluetoothDataViewModel.class);
-
-        Button btnONOFF = (Button) listBinding.btnONOFF;
-        btnEnableDisable_Discoverable = (Button) listBinding.btnDiscoverableOnOff;
-        lvNewDevices = (ListView) listBinding.lvNewDevices;
-        mBTDevices = new ArrayList<>();
-        btnStartConnection = (Button) listBinding.btnStartConnection;
-        //Broadcasts when bond state changes (ie:pairing)
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
-        requireContext().registerReceiver(mBroadcastReceiver4, filter);
-
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        lvNewDevices.setOnItemClickListener(this);
-
-
-        btnONOFF.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(TAG, "onClick: enabling/disabling bluetooth.");
-
-                //   Log.d(TAG, "ERROR " + String.valueOf(viewmodel.test.getValue()));
-//            enableDisableBT();
-            }
-        });
-
-
-        btnStartConnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startConnection();
-            }
-        });
+//
+//        Button btnONOFF = (Button) listBinding.btnONOFF;
+//        btnEnableDisable_Discoverable = (Button) listBinding.btnDiscoverableOnOff;
+//        lvNewDevices = (ListView) listBinding.lvNewDevices;
+//        mBTDevices = new ArrayList<>();
+//        btnStartConnection = (Button) listBinding.btnStartConnection;
+//        //Broadcasts when bond state changes (ie:pairing)
+//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
+//        requireContext().registerReceiver(mBroadcastReceiver4, filter);
+//
+//        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//
+//        lvNewDevices.setOnItemClickListener(this);
+//
+//
+//        btnONOFF.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.d(TAG, "onClick: enabling/disabling bluetooth.");
+//
+////            enableDisableBT();
+//            }
+//        });
+//
+//
+//        btnStartConnection.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                startConnection();
+//            }
+//        });
 
         return inflater.inflate(R.layout.fragment_list, container, false);
     }
@@ -146,14 +146,6 @@ public class ListFragment extends Fragment implements AdapterView.OnItemClickLis
         super.onCreate(savedInstanceState);
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        model =  new ViewModelProvider((MainActivity) getContext()).get(BluetoothDataViewModel.class);
-        model.addReading(25);
-        List<Integer> temp = Objects.requireNonNull(model.getReadings().getValue()).values;
     }
 
     @SuppressLint("MissingPermission")

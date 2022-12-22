@@ -33,12 +33,15 @@ import com.example.ecg.databinding.FragmentListBinding;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
     //    private BluetoothAdapter bAdapter = BluetoothAdapter.getDefaultAdapter();
 //    static final UUID mUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private BluetoothConnectionService mainViewModel;
+    private  BluetoothDataViewModel model;
 
     private static final String TAG = "MainActivity";
 
@@ -232,7 +235,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     public void btnEnableDisable_Discoverable(View view) {
         Log.d(TAG, "btnEnableDisable_Discoverable: Making device discoverable for 300 seconds.");
-
+        model =  new ViewModelProvider(this).get(BluetoothDataViewModel.class);
+        model.addReading(28);
+        List<Integer> temp = Objects.requireNonNull(model.getReadings().getValue()).values;
+        Log.d(TAG, "ERROR " );
         Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
         startActivity(discoverableIntent);
@@ -308,44 +314,4 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 }
 
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        ntView(R.layout.activity_main);
-//
-//
-
-//        if (bAdapter == null) {
-//            Toast.makeText(getApplicationContext(), "Bluetooth Not Supported", Toast.LENGTH_SHORT).show();
-//        } else {
-//            BluetoothDevice hc06 = bAdapter.getRemoteDevice("00:21:06:BE:79:65");
-//            BluetoothSocket btSocket = null;
-//            try {
-//                btSocket = hc06.createRfcommSocketToServiceRecord(mUUID);
-//
-//            } catch (IOException e) {
-//                Toast.makeText(MainActivity.this, "Error", Toast.LENGTH_SHORT).show();
-//                e.printStackTrace();
-//            }
-//
-//            try{
-//                btSocket.connect();
-//            }catch (IOException connEx)
-//            {
-//                try {
-//                    btSocket.close();
-//                } catch (IOException closeException) {
-//                    //Error
-//                }
-//            }
-//
-//            if (btSocket != null && btSocket.isConnected()) {
-//                //Socket is connected, now we can obtain our IO streams
-//                Toast.makeText(MainActivity.this, "Connected: " + String.valueOf(hc06.getName()), Toast.LENGTH_SHORT).show();
-//
-//            }
-//        }
-
-
-//    }
 
